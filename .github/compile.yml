@@ -1,0 +1,28 @@
+name: Compilation Test
+
+on:
+  push:
+
+jobs:
+  run-jpf:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        java: [ '17' ]
+    name: Java ${{ matrix.java }} Run JPF
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        ref: 0550d3f7907c635744c08ad8ff9c45e1b6281cc7
+
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: ${{ matrix.java }}
+
+    - name: Compile Java sources
+      run: |
+        ./gradlew clean build -x test
